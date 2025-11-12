@@ -1,0 +1,6 @@
+- name: "Custom Power"
+  unique_id: "current_power"
+  state: "{{ states('input_number.sensor_custom_power') }}"
+  unit_of_measurement: "kWh"
+  device_class: energy
+  state_class: total_increasing

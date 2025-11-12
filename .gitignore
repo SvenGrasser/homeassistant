@@ -1,0 +1,10 @@
+secrets.yaml
+*.db
+*.db-shm
+*.db-wal
+*.log
+*.log.*
+*.lock
+.storage/
+blueprints/
+tts/

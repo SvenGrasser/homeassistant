@@ -1,0 +1,116 @@
+- id: '1726507015067'
+  alias: Automation-AVM-Button-Licht
+  description: ''
+  trigger:
+  - platform: webhook
+    allowed_methods:
+    - POST
+    - PUT
+    local_only: true
+    webhook_id: button_sven_clicked
+  condition: []
+  action:
+  - action: light.toggle
+    metadata: {}
+    data: {}
+    target:
+      device_id: 9105a7791f90c968c0a9308bfe9ece74
+  mode: single
+- id: '1734955000920'
+  alias: Christbaum
+  description: ''
+  triggers:
+  - allowed_methods:
+    - POST
+    - PUT
+    local_only: true
+    trigger: webhook
+    webhook_id: button_wohnen_clicked
+  conditions: []
+  actions:
+  - action: switch.toggle
+    metadata: {}
+    data: {}
+    target:
+      device_id: 0812a0b52966ece7134c98104dcaa460
+  mode: single
+- id: '1735242020369'
+  alias: Christbaum ein
+  description: ''
+  triggers:
+  - trigger: time
+    at: 06:00:00
+  - trigger: time
+    at: '17:30:00'
+  conditions: []
+  actions:
+  - type: turn_on
+    device_id: 0812a0b52966ece7134c98104dcaa460
+    entity_id: 5e9d854e14b55381e2dfab4ce7d80303
+    domain: switch
+  mode: single
+- id: '1735242087943'
+  alias: Christbaum aus
+  description: ''
+  triggers:
+  - trigger: time
+    at: 08:00:00
+  - trigger: time
+    at: '20:30:00'
+  conditions: []
+  actions:
+  - type: turn_off
+    device_id: 0812a0b52966ece7134c98104dcaa460
+    entity_id: 5e9d854e14b55381e2dfab4ce7d80303
+    domain: switch
+  mode: single
+- id: battery_warning_daily
+  alias: Batteriewarnung bei <40%
+  description: Tägliche Benachrichtigung, wenn Batterien unter 40% sind
+  trigger:
+  - platform: time
+    at: '18:00:00'
+  condition: []
+  action:
+  - variables:
+      low_batteries: "{% set low = namespace(items=[]) %} {% for e in states %}\n
+        \ {# 1) battery_level-Attribut #}\n  {% if 'battery_level' in e.attributes
+        %}\n    {% set v = (e.attributes.battery_level | string).replace('%','') %}\n
+        \   {% if v not in ['unknown', 'unavailable', 'None', ''] and v | float(100)
+        < 40 %}\n      {% set low.items = low.items + [e.name ~ \" (\" ~ v ~ \"%)\"]
+        %}\n    {% endif %}\n  {# 2) device_class: battery als eigener Sensor #}\n
+        \ {% elif e.attributes.device_class == 'battery' %}\n    {% set v = (e.state
+        | string).replace('%','') %}\n    {% if v not in ['unknown', 'unavailable',
+        'None', ''] and v | float(100) < 40 %}\n      {% set low.items = low.items
+        + [e.name ~ \" (\" ~ v ~ \"%)\"] %}\n    {% endif %}\n  {% endif %}\n{% endfor
+        %} {{ low.items | join(', ') }}\n"
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ low_batteries | length > 0 }}'
+      sequence:
+      - service: notify.notify
+        data:
+          title: "Batteriewarnung \U0001F50B"
+          message: 'Folgende Geräte haben weniger als 40% Batterie: {{ low_batteries
+            }}
+
+            '
+  mode: single
+- id: '1762681896130'
+  alias: Wäsche fertig
+  description: ''
+  triggers:
+  - trigger: numeric_state
+    entity_id:
+    - sensor.steckdose_keller_waschmaschine_leistung
+    for:
+      minutes: 3
+    below: 2
+  conditions: []
+  actions:
+  - action: notify.notify
+    data:
+      title: "Wäsche fertig"
+      message: 'Wäsche fertig'
+  mode: single
