@@ -114,3 +114,20 @@
       title: "Wäsche fertig"
       message: 'Wäsche fertig'
   mode: single
+- id: 'trockner_fertig'
+  alias: Trockner fertig
+  description: ''
+  triggers:
+  - trigger: numeric_state
+    entity_id:
+    - sensor.steckdose_keller_trockner_leistung
+    for:
+      minutes: 3
+    below: 2
+  conditions: []
+  actions:
+  - action: notify.notify
+    data:
+      title: "Trockner fertig"
+      message: 'Trockner fertig'
+  mode: single
