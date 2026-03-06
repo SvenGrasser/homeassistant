@@ -9,9 +9,6 @@ frontend:
 automation: !include automations.yaml
 script: !include scripts.yaml
 scene: !include scenes.yaml
-
-
-influxdb: !include influxdb.yaml
       
 template:
   sensor: !include templates/sensor_power.yaml
