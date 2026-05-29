@@ -1,18 +1,19 @@
 - id: '1726507015067'
   alias: Automation-AVM-Button-Licht
   description: ''
-  trigger:
-  - platform: webhook
-    allowed_methods:
+  triggers:
+  - allowed_methods:
     - POST
     - PUT
     local_only: true
     webhook_id: button_sven_clicked
-  condition: []
-  action:
+    trigger: webhook
+  conditions: []
+  actions:
   - action: light.toggle
     metadata: {}
-    data: {}
+    data:
+      brightness: 50
     target:
       device_id: 9105a7791f90c968c0a9308bfe9ece74
   mode: single
@@ -40,8 +41,6 @@
   triggers:
   - trigger: time
     at: 06:00:00
-  - trigger: time
-    at: '17:30:00'
   conditions: []
   actions:
   - type: turn_on
@@ -54,9 +53,7 @@
   description: ''
   triggers:
   - trigger: time
-    at: 08:00:00
-  - trigger: time
-    at: '20:30:00'
+    at: '22:30:00'
   conditions: []
   actions:
   - type: turn_off
@@ -111,10 +108,10 @@
   actions:
   - action: notify.notify
     data:
-      title: "Wäsche fertig"
-      message: 'Wäsche fertig'
+      title: Wäsche fertig
+      message: Wäsche fertig
   mode: single
-- id: 'trockner_fertig'
+- id: trockner_fertig
   alias: Trockner fertig
   description: ''
   triggers:
@@ -128,6 +125,181 @@
   actions:
   - action: notify.notify
     data:
-      title: "Trockner fertig"
-      message: 'Trockner fertig'
+      title: Trockner fertig
+      message: Trockner fertig
+  mode: single
+- id: '1779974197301'
+  alias: Bewässerung Zone1 ein
+  description: ''
+  triggers:
+  - trigger: time
+    at: '18:00:00'
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+    - sat
+    - sun
+  conditions: []
+  actions:
+  - action: switch.turn_on
+    metadata: {}
+    target:
+      device_id: 1808ecdb0e4973f20948a7c9914c5738
+    data: {}
+  - action: notify.notify
+    metadata: {}
+    data:
+      message: Zone 1 wird bewässert
+  mode: single
+- id: '1779974403416'
+  alias: Bewässerung Zone 1 aus
+  description: ''
+  triggers:
+  - trigger: time
+    at: '18:20:00'
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+    - sat
+    - sun
+  conditions: []
+  actions:
+  - action: notify.notify
+    metadata: {}
+    data:
+      message: Zone 1 wird nicht mehr bewässert
+  - action: switch.turn_off
+    metadata: {}
+    target:
+      entity_id: switch.sensor_wasser_aussen
+    data: {}
+  - action: input_select.select_option
+    metadata: {}
+    target:
+      entity_id: input_select.input_select_next_zone
+    data:
+      option: Zone 2
+  mode: single
+- id: '1779974476964'
+  alias: Bewässerung Zone2 ein
+  description: ''
+  triggers:
+  - trigger: time
+    at: '18:30:00'
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+    - sat
+    - sun
+  conditions: []
+  actions:
+  - action: switch.turn_on
+    metadata: {}
+    target:
+      device_id: 1808ecdb0e4973f20948a7c9914c5738
+    data: {}
+  - action: notify.notify
+    metadata: {}
+    data:
+      message: Zone 2 wird bewässert
+  mode: single
+- id: '1779974557279'
+  alias: Bewässerung Zone2 aus
+  description: ''
+  triggers:
+  - trigger: time
+    at: '18:50:00'
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+    - sat
+    - sun
+  conditions: []
+  actions:
+  - action: notify.notify
+    metadata: {}
+    data:
+      message: Zone 2 wird nicht mehr bewässert
+  - action: switch.turn_off
+    metadata: {}
+    target:
+      entity_id: switch.sensor_wasser_aussen
+    data: {}
+  - action: input_select.select_option
+    metadata: {}
+    target:
+      entity_id: input_select.input_select_next_zone
+    data:
+      option: Zone 1
+  mode: single
+- id: '1780033338758'
+  alias: Bewässerung
+  description: ''
+  triggers:
+  - trigger: time
+    at: '18:00:00'
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+    - sat
+    - sun
+  conditions: []
+  actions:
+  - action: switch.turn_on
+    metadata: {}
+    target:
+      device_id: 1808ecdb0e4973f20948a7c9914c5738
+    data: {}
+  - action: notify.notify
+    metadata: {}
+    data:
+      message: Zone 1 wird bewässert
+  - delay:
+      minutes: 20
+  - action: switch.turn_off
+    metadata: {}
+    target:
+      device_id: 1808ecdb0e4973f20948a7c9914c5738
+    data: {}
+  - action: notify.notify
+    metadata: {}
+    data:
+      message: Zone 1 wird nicht mehr bewässert
+  - delay:
+      minutes: 10
+  - action: switch.turn_on
+    metadata: {}
+    target:
+      device_id: 1808ecdb0e4973f20948a7c9914c5738
+    data: {}
+  - action: notify.notify
+    metadata: {}
+    data:
+      message: Zone 2 wird bewässert
+  - delay:
+      minutes: 20
+  - action: switch.turn_off
+    metadata: {}
+    target:
+      device_id: 1808ecdb0e4973f20948a7c9914c5738
+    data: {}
+  - action: notify.notify
+    metadata: {}
+    data:
+      message: Zone 2 wird nicht mehr bewässert
   mode: single
