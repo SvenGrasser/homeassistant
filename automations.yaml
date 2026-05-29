@@ -276,6 +276,12 @@
     target:
       device_id: 1808ecdb0e4973f20948a7c9914c5738
     data: {}
+  - action: input_select.select_option
+    metadata: {}
+    target:
+      entity_id: input_select.input_select_next_zone
+    data:
+      option: Zone 2
   - action: notify.notify
     metadata: {}
     data:
@@ -298,6 +304,12 @@
     target:
       device_id: 1808ecdb0e4973f20948a7c9914c5738
     data: {}
+  - action: input_select.select_option
+    metadata: {}
+    target:
+      entity_id: input_select.input_select_next_zone
+    data:
+      option: Zone 1
   - action: notify.notify
     metadata: {}
     data:
