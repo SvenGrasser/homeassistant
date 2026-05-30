@@ -128,122 +128,6 @@
       title: Trockner fertig
       message: Trockner fertig
   mode: single
-- id: '1779974197301'
-  alias: Bewässerung Zone1 ein
-  description: ''
-  triggers:
-  - trigger: time
-    at: '18:00:00'
-    weekday:
-    - mon
-    - tue
-    - wed
-    - thu
-    - fri
-    - sat
-    - sun
-  conditions: []
-  actions:
-  - action: switch.turn_on
-    metadata: {}
-    target:
-      device_id: 1808ecdb0e4973f20948a7c9914c5738
-    data: {}
-  - action: notify.notify
-    metadata: {}
-    data:
-      message: Zone 1 wird bewässert
-  mode: single
-- id: '1779974403416'
-  alias: Bewässerung Zone 1 aus
-  description: ''
-  triggers:
-  - trigger: time
-    at: '18:20:00'
-    weekday:
-    - mon
-    - tue
-    - wed
-    - thu
-    - fri
-    - sat
-    - sun
-  conditions: []
-  actions:
-  - action: notify.notify
-    metadata: {}
-    data:
-      message: Zone 1 wird nicht mehr bewässert
-  - action: switch.turn_off
-    metadata: {}
-    target:
-      entity_id: switch.sensor_wasser_aussen
-    data: {}
-  - action: input_select.select_option
-    metadata: {}
-    target:
-      entity_id: input_select.input_select_next_zone
-    data:
-      option: Zone 2
-  mode: single
-- id: '1779974476964'
-  alias: Bewässerung Zone2 ein
-  description: ''
-  triggers:
-  - trigger: time
-    at: '18:30:00'
-    weekday:
-    - mon
-    - tue
-    - wed
-    - thu
-    - fri
-    - sat
-    - sun
-  conditions: []
-  actions:
-  - action: switch.turn_on
-    metadata: {}
-    target:
-      device_id: 1808ecdb0e4973f20948a7c9914c5738
-    data: {}
-  - action: notify.notify
-    metadata: {}
-    data:
-      message: Zone 2 wird bewässert
-  mode: single
-- id: '1779974557279'
-  alias: Bewässerung Zone2 aus
-  description: ''
-  triggers:
-  - trigger: time
-    at: '18:50:00'
-    weekday:
-    - mon
-    - tue
-    - wed
-    - thu
-    - fri
-    - sat
-    - sun
-  conditions: []
-  actions:
-  - action: notify.notify
-    metadata: {}
-    data:
-      message: Zone 2 wird nicht mehr bewässert
-  - action: switch.turn_off
-    metadata: {}
-    target:
-      entity_id: switch.sensor_wasser_aussen
-    data: {}
-  - action: input_select.select_option
-    metadata: {}
-    target:
-      entity_id: input_select.input_select_next_zone
-    data:
-      option: Zone 1
-  mode: single
 - id: '1780033338758'
   alias: Bewässerung
   description: ''
@@ -270,7 +154,7 @@
     data:
       message: Zone 1 wird bewässert
   - delay:
-      minutes: 20
+      minutes: '{{ states(''input_number.duration_zone1'') | float }}'
   - action: switch.turn_off
     metadata: {}
     target:
@@ -287,7 +171,7 @@
     data:
       message: Zone 1 wird nicht mehr bewässert
   - delay:
-      minutes: 10
+      minutes: '{{ states(''input_number.default_delay'') | float }}'
   - action: switch.turn_on
     metadata: {}
     target:
@@ -298,7 +182,7 @@
     data:
       message: Zone 2 wird bewässert
   - delay:
-      minutes: 20
+      minutes: '{{ states(''input_number.duration_zone2'') | float }}'
   - action: switch.turn_off
     metadata: {}
     target:
