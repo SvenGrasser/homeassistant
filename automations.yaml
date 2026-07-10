@@ -1,3 +1,4 @@
+# Schaltet das Licht über den AVM-Button.
 - id: '1726507015067'
   alias: Automation-AVM-Button-Licht
   description: ''
@@ -17,6 +18,7 @@
     target:
       device_id: 9105a7791f90c968c0a9308bfe9ece74
   mode: single
+# Schaltet den Christbaum über einen Webhook um.
 - id: '1734955000920'
   alias: Christbaum
   description: ''
@@ -35,6 +37,7 @@
     target:
       device_id: 0812a0b52966ece7134c98104dcaa460
   mode: single
+# Schaltet den Christbaum morgens ein.
 - id: '1735242020369'
   alias: Christbaum ein
   description: ''
@@ -48,6 +51,7 @@
     entity_id: 5e9d854e14b55381e2dfab4ce7d80303
     domain: switch
   mode: single
+# Schaltet den Christbaum abends aus.
 - id: '1735242087943'
   alias: Christbaum aus
   description: ''
@@ -61,6 +65,7 @@
     entity_id: 5e9d854e14b55381e2dfab4ce7d80303
     domain: switch
   mode: single
+# Sendet eine tägliche Benachrichtigung bei schwachen Batterien.
 - id: battery_warning_daily
   alias: Batteriewarnung bei <40%
   description: Tägliche Benachrichtigung, wenn Batterien unter 40% sind
@@ -94,6 +99,7 @@
 
             '
   mode: single
+# Benachrichtigt, wenn die Waschmaschine fertig ist.
 - id: '1762681896130'
   alias: Wäsche fertig
   description: ''
@@ -111,6 +117,7 @@
       title: Wäsche fertig
       message: Wäsche fertig
   mode: single
+# Benachrichtigt, wenn der Trockner fertig ist.
 - id: trockner_fertig
   alias: Trockner fertig
   description: ''
@@ -128,6 +135,7 @@
       title: Trockner fertig
       message: Trockner fertig
   mode: single
+# Steuert die Bewässerung über vier Zonen nacheinander.
 - id: '1780033338758'
   alias: Bewässerung
   description: ''
@@ -193,9 +201,65 @@
     target:
       entity_id: input_select.input_select_next_zone
     data:
-      option: Zone 1
+      option: Zone 3
   - action: notify.notify
     metadata: {}
     data:
       message: Zone 2 wird nicht mehr bewässert
+  - delay:
+      minutes: '{{ states(''input_number.default_delay'') | float }}'
+  - action: switch.turn_on
+    metadata: {}
+    target:
+      device_id: 1808ecdb0e4973f20948a7c9914c5738
+    data: {}
+  - action: notify.notify
+    metadata: {}
+    data:
+      message: Zone 3 wird bewässert
+  - delay:
+      minutes: '{{ states(''input_number.duration_zone3'') | float }}'
+  - action: switch.turn_off
+    metadata: {}
+    target:
+      device_id: 1808ecdb0e4973f20948a7c9914c5738
+    data: {}
+  - action: input_select.select_option
+    metadata: {}
+    target:
+      entity_id: input_select.input_select_next_zone
+    data:
+      option: Zone 4
+  - action: notify.notify
+    metadata: {}
+    data:
+      message: Zone 3 wird nicht mehr bewässert
+  - delay:
+      minutes: '{{ states(''input_number.default_delay'') | float }}'
+  - action: switch.turn_on
+    metadata: {}
+    target:
+      device_id: 1808ecdb0e4973f20948a7c9914c5738
+    data: {}
+  - action: notify.notify
+    metadata: {}
+    data:
+      message: Zone 4 wird bewässert
+  - delay:
+      minutes: '{{ states(''input_number.duration_zone4'') | float }}'
+  - action: switch.turn_off
+    metadata: {}
+    target:
+      device_id: 1808ecdb0e4973f20948a7c9914c5738
+    data: {}
+  - action: input_select.select_option
+    metadata: {}
+    target:
+      entity_id: input_select.input_select_next_zone
+    data:
+      option: Zone 1
+  - action: notify.notify
+    metadata: {}
+    data:
+      message: Zone 4 wird nicht mehr bewässert
   mode: single
